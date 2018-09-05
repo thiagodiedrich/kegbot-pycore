@@ -256,6 +256,7 @@ class FlowManager(Manager):
       when = datetime.datetime.now()
 
     flow.AddTicks(delta, when, tap)
+    flow.IncrementCount()
     self._PublishUpdate(flow)
     return flow, is_new
 
@@ -381,6 +382,7 @@ class DrinkManager(Manager):
     pour_time = event.last_activity_time
     duration = (event.last_activity_time - event.start_time).seconds
     flow_id = event.flow_id
+    msgCount = event.message_count
 
     self._logger.info('Processing pending drink: flow_id=0x%08x, meter=%s, volume=%s, duration=%s' % (
       event.flow_id, event.meter_name, volume_ml, duration))
@@ -395,6 +397,10 @@ class DrinkManager(Manager):
     if duration < common_defs.MIN_DURATION_TO_RECORD:
         self._logger.info('Not recording flow: (%i s) <= '
             'MIN_DURATION_TO_RECORD (%i)' % (duration, common_defs.MIN_DURATION_TO_RECORD))
+        return
+    if msgCount < common_defs.MIN_UPDATES_TO_RECORD:
+        self._logger.info('Not recording flow: (%i) <= '
+            'MIN_UPDATES_TO_RECORD (%i)' % (msgCount, common_defs.MIN_UPDATES_TO_RECORD))
         return
     if ticks <= 0:
         self._logger.info('Not recording flow: no ticks.')

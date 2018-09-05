@@ -86,6 +86,7 @@ class FlowUpdate(Event):
   last_activity_time = EventField()
   ticks = EventField()
   volume_ml = EventField()
+  message_count = EventField()
 
 class WebFlowUpdate(Event):
   class FlowState:
