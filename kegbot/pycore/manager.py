@@ -264,8 +264,10 @@ class FlowManager(Manager):
     self._PublishUpdate(flow)
 
   def _PublishUpdate(self, flow):
+    client = kegnet.KegnetClient()
     event = flow.GetUpdateEvent()
     self._PublishEvent(event)
+    client.SendWebFlowEvent(flow.GetWebUpdateEvent())
 
   @EventHandler(kbevent.MeterUpdate)
   def HandleFlowActivityEvent(self, event):
@@ -380,8 +382,8 @@ class DrinkManager(Manager):
     duration = (event.last_activity_time - event.start_time).seconds
     flow_id = event.flow_id
 
-    self._logger.info('Processing pending drink: flow_id=0x%08x, meter=%s, volume=%s' % (
-      event.flow_id, event.meter_name, volume_ml))
+    self._logger.info('Processing pending drink: flow_id=0x%08x, meter=%s, volume=%s, duration=%s' % (
+      event.flow_id, event.meter_name, volume_ml, duration))
 
     # TODO: add to flow event
     auth_token = None
@@ -389,6 +391,10 @@ class DrinkManager(Manager):
     if volume_ml is not None and volume_ml < common_defs.MIN_VOLUME_TO_RECORD:
         self._logger.info('Not recording flow: (%i mL) <= '
             'MIN_VOLUME_TO_RECORD (%i)' % (volume_ml, common_defs.MIN_VOLUME_TO_RECORD))
+        return
+    if duration < common_defs.MIN_DURATION_TO_RECORD:
+        self._logger.info('Not recording flow: (%i s) <= '
+            'MIN_DURATION_TO_RECORD (%i)' % (duration, common_defs.MIN_DURATION_TO_RECORD))
         return
     if ticks <= 0:
         self._logger.info('Not recording flow: no ticks.')

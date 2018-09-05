@@ -58,6 +58,22 @@ class Flow:
 
     return event
 
+  def GetWebUpdateEvent(self):
+    event = kbevent.WebFlowUpdate()
+    event.flow_id = self._flow_id
+    event.meter_name = self._meter_name
+    event.state = self._state
+
+    if self._bound_username:
+      event.username = self._bound_username
+
+    event.start_time = self._start_time
+    event.last_activity_time = self._end_time
+    event.ticks = self.GetTicks()
+    event.volume_ml = self.GetVolumeMl()
+
+    return event
+
   def AddTicks(self, amount, when=None, tap=None):
     self._total_ticks += amount
     if when is None:

@@ -118,6 +118,9 @@ class KegnetClient(object):
   def SendRelayEvent(self, event):
     return self.send_message(event)
 
+  def SendWebFlowEvent(self, event):
+    return self.send_message(event)
+
   def Listen(self):
     while True:
       try:

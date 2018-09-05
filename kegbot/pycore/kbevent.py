@@ -87,6 +87,20 @@ class FlowUpdate(Event):
   ticks = EventField()
   volume_ml = EventField()
 
+class WebFlowUpdate(Event):
+  class FlowState:
+    ACTIVE = "active"
+    IDLE = "idle"
+    COMPLETED = "completed"
+  flow_id = EventField()
+  meter_name = EventField()
+  state = EventField()
+  username = EventField()
+  start_time = EventField()
+  last_activity_time = EventField()
+  ticks = EventField()
+  volume_ml = EventField()
+
 class DrinkCreatedEvent(Event):
   flow_id = EventField()
   drink_id = EventField()

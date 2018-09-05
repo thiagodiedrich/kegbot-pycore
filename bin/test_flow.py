@@ -39,7 +39,7 @@ gflags.DEFINE_integer('steps', 10,
     'the value of `ticks/steps` will be sent `steps` times.',
     lower_bound=1)
 
-gflags.DEFINE_float('delay_seconds', 0.1,
+gflags.DEFINE_float('delay_seconds', 0.25,
     'Delay, in seconds, between meter updates.  If set to '
     '0, there will be no delay.',
     lower_bound=0, upper_bound=60)

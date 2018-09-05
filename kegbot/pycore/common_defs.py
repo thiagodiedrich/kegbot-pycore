@@ -23,6 +23,9 @@
 # Don't record teeny drinks
 MIN_VOLUME_TO_RECORD = 35
 
+# Don't record short drinks (value in seconds)
+MIN_DURATION_TO_RECORD = 2
+
 # The maximum difference between consecutive meter readings that is considered
 # valid.
 MAX_METER_READING_DELTA = 2200*2
